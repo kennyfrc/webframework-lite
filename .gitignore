@@ -1,0 +1,13 @@
+# Ignore all
+*
+
+# Except these folders
+!lib/
+!lib/*
+
+# Except these files
+!.gitignore
+!*.ru
+!Gemfile*
+!*.md
+!*.sh
