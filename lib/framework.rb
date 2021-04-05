@@ -17,7 +17,9 @@ class App
             content = route.match(request)
             # [][-1] is an enumerable of stringable objects
             # => sometimes you want to return responses lazily (through an enumerable)
-            return [200, {}, [content]] if content
+			# .to_s because you don't want this to blow up when 
+			# a route handler returns an array or other format
+            return [200, {'Content-Type' => 'text/plain'}, [content.to_s]] if content
         end
 
         # otherwise, return 404
@@ -62,7 +64,7 @@ class App
 				is_variable = spec_comp.start_with?(':')
 				if is_variable
 					key = spec_comp.sub(/\A:/, "")
-					params[key] = path_comp
+					params[key] = URI.decode(path_comp)
 				else
 					return nil unless path_comp == spec_comp
 				end
