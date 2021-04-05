@@ -46,8 +46,9 @@ class App
     end
 
     class Route < Struct.new(:route_spec, :block)
-        def match(request)
-			puts request.path
+        # this parses the route spec 
+		# and ensures that it matches with the incoming request path
+		def match(request)
 			path_components = request.path.split('/')
 			spec_components = route_spec.split('/')
         	
@@ -55,9 +56,11 @@ class App
 
 			return nil unless path_components.length == spec_components.length
 			
+			# this checks if the path contains a variable, then set it within the params
+			# and it will invoke block.call(params) accordingly
 			path_components.zip(spec_components).each do |path_comp, spec_comp|
-				is_var = spec_comp.start_with?(':')
-				if is_var
+				is_variable = spec_comp.start_with?(':')
+				if is_variable
 					key = spec_comp.sub(/\A:/, "")
 					params[key] = path_comp
 				else
@@ -65,8 +68,6 @@ class App
 				end
 			end	
 		
-			p params
-
 			block.call(params)
 		end
     end
