@@ -4,3 +4,4 @@ ruby '2.6.3'
 
 gem 'rack'
 gem 'pg'
+gem 'rspec'

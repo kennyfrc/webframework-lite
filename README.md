@@ -4,24 +4,33 @@ Rack-based framework, uses Sinatra-style routing syntax
 
 ## Setup / Process
 
-### RouteTable
+### App / RouteTable Classes
 
-1. Create gemfile to include rack
-2. Within `config.ru`, you need to set `run APP`
-3. Within APP, it needs a call method
-4. Upon initializing App, it creates a new RouteTable
-	* The RouteTable initializes each Route
-	* Then it will dynamically call the block once a request for that is received
-		* It calls it by iterating through the RoutesTable then returning 200 upon match then calling the block
-		* Otherwise, it returns a 404
+Purpose: it receives a request from Rack via #call, and using the RouteTable and Route classes, it parses the request path, then returns a block.call(params) as the response. 
+1. There is an app that is rack-based in that it uses #call which loops through routes
+2. This app contains a RouteTable, which has a #get method, which uses a Route object to parse the developer-defined paths
+3. The route object then uses developer-defined blocks to define the response for the user.
 
 ### Database Class
 
-1. Use the pg gem to be able to create a database
-2. You add sql queries then apply a wrapper around it
-3. You then pass it to something like `exec_sql`
-4. The above (1-3) still has SQL injection vulnerabilities
+Purpose: 
+* It allows one to establish a connection
+* It then creates a new Record using an SQL Executor
+* The Executor uses a regex-based template parser
+* The QUERIES follow a developer-defined template
+* This template is not guaranteed to be safe
 
+1. You will need to develop it as "route first"
+2. Use the pg gem to be able to create a database
+3. You add sql QUERIES then apply a wrapper around it
+4. You then pass it to something like `exec_sql`
+5. The above (1-3) still has SQL injection vulnerabilities
+6. To remove SQL injection vulnerabilities, you need to use the in-built exec_params, which replaces exec_sql
+7. To allow for different order arguments within your create_submission function, what you need to do is to first define a SQL templating script then you set up an Executor class which allows you to dynamically substitute values with a regex.
+
+### Method missing
+
+* https://www.leighhalliday.com/ruby-metaprogramming-method-missing
 
 ## Other stuff learnt
 
