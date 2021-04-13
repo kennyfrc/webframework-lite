@@ -4,6 +4,8 @@
 # Except these folders
 !lib/
 !lib/*.rb
+!spec
+!spec/*.rb
 
 # Except these files
 !.gitignore
